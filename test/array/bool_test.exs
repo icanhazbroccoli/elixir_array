@@ -8,12 +8,17 @@ defmodule ArrayBoolTest do
   end
 
   test "v_to_b" do
-    assert ArrayTest.v_to_b_bool(true)  == <<1::size(1)>>
-    assert ArrayTest.v_to_b_bool(false) == <<0::size(1)>>
+    assert ArrayTest.v_to_b_bool(true)  == <<1::1>>
+    assert ArrayTest.v_to_b_bool(false) == <<0::1>>
+  end
+
+  test "b_to_v" do
+    assert ArrayTest.b_to_v_bool(<<1::1>>) == true
+    assert ArrayTest.b_to_v_bool(<<0::1>>) == false
   end
 
   test "new" do
-    assert ArrayTest.new(:bool, 5) == {:array, :bool, 5, <<0::size(5)>>}
+    assert ArrayTest.new(:bool, 5) == {:array, :bool, 5, <<0::5>>}
   end
 
   test "set one by one independently" do
@@ -37,6 +42,25 @@ defmodule ArrayBoolTest do
     assert ar3 == {:array, :bool, 5, <<1::1, 1::1, 1::1, 0::2>>}
     assert ar4 == {:array, :bool, 5, <<1::1, 1::1, 1::1, 1::1, 0::1>>}
     assert ar5 == {:array, :bool, 5, <<1::1, 1::1, 1::1, 1::1, 1::1>>}
+  end
+
+  test "get val" do
+    arr = ArrayTest.new(:bool, 3)
+    0..2 |> Enum.each(fn ix ->
+      assert ArrayTest.get(arr, ix) == false
+    end)
+    ar1 = ArrayTest.set(arr, 0, true)
+    assert ArrayTest.get(ar1, 0) == true
+    assert ArrayTest.get(ar1, 1) == false
+    assert ArrayTest.get(ar1, 2) == false
+    ar2 = ArrayTest.set(arr, 1, true)
+    assert ArrayTest.get(ar2, 0) == false
+    assert ArrayTest.get(ar2, 1) == true
+    assert ArrayTest.get(ar2, 2) == false
+    ar3 = ArrayTest.set(arr, 2, true)
+    assert ArrayTest.get(ar3, 0) == false
+    assert ArrayTest.get(ar3, 1) == false
+    assert ArrayTest.get(ar3, 2) == true
   end
 
 end
