@@ -2,14 +2,15 @@ defmodule Array.Base do
   defmacro __using__([type: type, b_size: b_size]) when is_atom(type) and is_integer(b_size) do
     func_v_to_b = "v_to_b_#{type}" |> String.to_atom
     func_b_to_v = "b_to_v_#{type}" |> String.to_atom
-    quote do
+    is_valid_guard = "is_valid_#{type}" |> String.to_atom
+    res = quote do
 
       def new(unquote(type), capacity) do
         body_size = capacity * unquote(b_size)
         { :array, unquote(type), capacity, << 0 :: size( body_size ) >> }
       end
 
-      def set(arr={:array, unquote(type), capacity, body}, pos, val) when pos >= 0 and pos < capacity do
+      def set(arr={:array, unquote(type), capacity, body}, pos, val) when pos >= 0 and pos < capacity and unquote(is_valid_guard)(val) do
         pre_size = unquote(b_size) * pos
         v_size = unquote(b_size)
         rest_size = capacity * unquote(b_size) - pre_size - v_size
@@ -26,5 +27,9 @@ defmodule Array.Base do
       end
 
     end
+    if System.get_env("EXPLAIN_MACRO") do
+      IO.puts Macro.to_string(res)
+    end
+    res
   end
 end
