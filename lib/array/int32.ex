@@ -11,4 +11,10 @@ defmodule Array.Int32 do
       use Array.Base, type: :int32, b_size: 32
     end
   end
+
+  defmodule Sigils do
+    def sigil_i(list, _opts) do
+      list |> String.split |> Enum.map(&String.to_integer/1) |> Array.from_list_int32
+    end
+  end
 end

@@ -2,6 +2,7 @@ defmodule ArrayBoolTest do
 
   use ExUnit.Case
   doctest Array.Boolean
+  import Array.Sigils
 
   defmodule ArrayTest do
     use Array.Boolean

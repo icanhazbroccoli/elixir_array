@@ -13,4 +13,14 @@ defmodule Array.Boolean do
       use Array.Base, type: :bool, b_size: 1
     end
   end
+
+  defmodule Sigils do
+    def sigil_b(list, _opts) do
+      list |> String.split |> Enum.map(&string_to_bool/1) |> Array.from_list_bool
+    end
+
+    defp string_to_bool("true"),  do: true
+    defp string_to_bool("false"), do: false
+    defp string_to_bool(v), do: raise "#{v} is not a boolean value" 
+  end
 end

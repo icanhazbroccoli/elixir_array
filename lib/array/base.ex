@@ -1,8 +1,9 @@
 defmodule Array.Base do
   defmacro __using__([type: type, b_size: b_size]) when is_atom(type) and is_integer(b_size) do
-    func_v_to_b = "v_to_b_#{type}" |> String.to_atom
-    func_b_to_v = "b_to_v_#{type}" |> String.to_atom
-    is_valid_guard = "is_valid_#{type}" |> String.to_atom
+    func_v_to_b    = "v_to_b_#{type}"    |> String.to_atom
+    func_b_to_v    = "b_to_v_#{type}"    |> String.to_atom
+    is_valid_guard = "is_valid_#{type}"  |> String.to_atom
+    func_from_list = "from_list_#{type}" |> String.to_atom
     res = quote do
 
       def new(unquote(type), capacity) do
@@ -24,6 +25,17 @@ defmodule Array.Base do
         v_size = unquote(b_size)
         << _ :: size(pre_size), b_val :: size(v_size), _ :: bitstring >> = body
         unquote(func_b_to_v)(<<b_val::size(v_size)>>)
+      end
+
+      # def from_list_#{type}
+      def unquote(func_from_list)(list) do
+        bit_chunks = list |> Enum.map(fn x ->
+          case unquote(is_valid_guard)(x) do
+            true -> << unquote(func_v_to_b)(x) :: bitstring >>
+            _ -> raise "`#{x}` is not a valid #{unquote(type)} type"
+          end
+        end)
+        :erlang.setelement(4, Array.new(unquote(type), length(list)), bit_chunks |> Enum.reduce(<<>>, fn(x, acc) -> <<acc::bitstring, x :: bitstring>> end))
       end
 
     end

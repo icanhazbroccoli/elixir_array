@@ -11,4 +11,10 @@ defmodule Array.Int16 do
       use Array.Base, type: :int16, b_size: 16
     end
   end
+
+  defmodule Sigils do
+    def sigil_h(list, _opts) do
+      list |> String.split |> Enum.map(&String.to_integer/1) |> Array.from_list_int16
+    end
+  end
 end
