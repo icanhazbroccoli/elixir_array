@@ -1,7 +1,7 @@
 defmodule Array.UInt64 do
   defmacro __using__(_opts) do
     quote do
-      def v_to_b_uint64(val), do: << val :: 64 >>
+      def v_to_b_uint64(val), do: << val :: unsigned-integer-size(64) >>
       def b_to_v_uint64(<<v::unsigned-integer-size(64)>>), do: v
       defmacro is_valid_uint64(val) do
         quote do

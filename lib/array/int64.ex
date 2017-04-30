@@ -1,7 +1,7 @@
 defmodule Array.Int64 do
   defmacro __using__(_opts) do
     quote do
-      def v_to_b_int64(val), do: << val :: 64 >>
+      def v_to_b_int64(val), do: << val :: signed-integer-size(64) >>
       def b_to_v_int64(<<v::signed-integer-size(64)>>), do: v
       defmacro is_valid_int64(val) do
         quote do

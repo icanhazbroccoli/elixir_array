@@ -1,7 +1,7 @@
 defmodule Array.UInt16 do
   defmacro __using__(_opts) do
     quote do
-      def v_to_b_uint16(val), do: << val :: 16 >>
+      def v_to_b_uint16(val), do: << val :: unsigned-integer-size(16) >>
       def b_to_v_uint16(<<v::unsigned-integer-size(16)>>), do: v
       defmacro is_valid_uint16(val) do
         quote do
