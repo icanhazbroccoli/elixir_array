@@ -1,4 +1,6 @@
 defmodule Array do
+  defstruct t: :undef, c: 0, b: <<>>
+
   use Array.Boolean
   use Array.Int16
   use Array.UInt16
