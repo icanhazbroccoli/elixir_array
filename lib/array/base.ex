@@ -4,6 +4,7 @@ defmodule Array.Base do
     func_b_to_v    = "b_to_v_#{type}"    |> String.to_atom
     is_valid_guard = "is_valid_#{type}"  |> String.to_atom
     func_from_list = "from_list_#{type}" |> String.to_atom
+
     res = quote do
 
       def new(unquote(type), capacity) do
@@ -36,6 +37,12 @@ defmodule Array.Base do
           end
         end)
         %{Array.new(unquote(type), length(list)) | b: bit_chunks |> Enum.reduce(<<>>, fn(x, acc) -> <<acc::bitstring, x :: bitstring>> end)}
+      end
+
+      def to_list(arr=%Array{t: unquote(type), c: capacity, b: body}) do
+        for ix <- 0..(capacity-1) do
+          Array.get(arr, ix)
+        end
       end
 
     end
