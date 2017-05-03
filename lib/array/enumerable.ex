@@ -9,7 +9,7 @@ defmodule Array.Enumerable do
     def member?(arr=%Array{c: capacity}, el) do
       {:ok, Enum.find(0..(capacity-1), fn ix ->
         Array.get(arr, ix) == el
-      end) == nil}
+      end) != nil}
     end
 
     def reduce(_, {:halt, acc}, _fun), do: {:halted, acc}
